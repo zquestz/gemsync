@@ -22,7 +22,7 @@ end
 
 source_type = 'file'
 
-# If source is not just a text file
+# If source is not just a text file, or the text file specified doesn't exist
 unless File.readable?(opts[:source])
   source_type = 'directory'
   Trollop::die :source, "\n\t-- Directory or file '#{opts[:source]}' does not exist" unless File.directory?(opts[:source])
