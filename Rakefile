@@ -12,7 +12,7 @@ begin
     gem.homepage = "http://github.com/zquestz/gemsync"
     gem.authors = ["quest"]
     gem.executables = ["gemsync"]
-    gem.add_dependency 'trollop'
+    gem.add_dependency(%q<trollop>, [">= 1.16.2"])
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
