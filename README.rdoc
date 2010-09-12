@@ -10,6 +10,7 @@ Available Options:
                            /path/to/gemlist.txt
   --destination, -d <s>:   Ruby installation directory you want to sync up. Ex:
                            /opt/ruby-enterprise
+     --disable-sudo, -i:   Disable sudo when installing gems
        --build-docs, -b:   Build documentation
           --version, -v:   Print version and exit
              --help, -h:   Show this message
