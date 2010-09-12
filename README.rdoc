@@ -1,3 +1,5 @@
+= gemsync
+
 Small script to sync multiple gem installations.
 
 Usage: gemsync [options]
@@ -11,3 +13,7 @@ Available Options:
        --build-docs, -b:   Build documentation
           --version, -v:   Print version and exit
              --help, -h:   Show this message
+
+== Copyright
+
+Copyright (c) 2010 quest. See LICENSE for details.

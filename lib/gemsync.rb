@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 # Small script to sync multiple gem installations.
-# ©2010 Josh Ellithorpe
+# (c) 2010 Josh Ellithorpe
 
 require 'rubygems'
 require 'trollop'
