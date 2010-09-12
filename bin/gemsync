@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# Small script to sync multiple gem installations.
+# Small gem to sync multiple gem installations.
 # (c) 2010 Josh Ellithorpe
 
 require 'rubygems'
@@ -7,9 +7,9 @@ require 'trollop'
 
 # Setup arguments from the command line.
 opts = Trollop::options do
-  version "gemsync 0.1.1 (c) 2010 Josh Ellithorpe"
+  version "gemsync 0.1.2 (c) 2010 Josh Ellithorpe"
   banner <<-EOS
-Small script to sync multiple gem installations.
+Small gem to sync multiple gem installations.
 
 Usage: gemsync [options]
 
@@ -36,7 +36,7 @@ Trollop::die :destination, "\n\t-- Binary '#{opts[:destination]}/bin/gem' does n
 
 @main_dir = opts[:source]
 @sync_dir = opts[:destination]
-@docstring = opts[:build_docs] ? '--no-ri --no-rdoc' : ''
+@docstring = opts[:build_docs] ? '' : '--no-ri --no-rdoc'
 @sudostring = opts[:disable_sudo] ? '' : (`which sudo`.strip + ' ') # Just stripping newline
 
 # Gems you don't want to sync

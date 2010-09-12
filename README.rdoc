@@ -1,6 +1,6 @@
 = gemsync
 
-Small script to sync multiple gem installations.
+Small gem to sync multiple gem installations.
 
 Usage: gemsync [options]
 
