@@ -23,7 +23,7 @@ end
 @source_type = 'file'
 
 # If source is not just a text file, or the text file specified doesn't exist
-unless File.readable?(opts[:source])
+unless File.ftype?(opts[:source]) == 'file'
   @source_type = 'directory'
   Trollop::die :source, "\n\t-- Directory or file '#{opts[:source]}' does not exist" unless File.directory?(opts[:source])
   Trollop::die :source, "\n\t-- Binary '#{opts[:source]}/bin/gem' does not exist" unless File.exists?("#{opts[:source]}/bin/gem")
