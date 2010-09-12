@@ -20,11 +20,11 @@ EOS
   opt :build_docs, "Build documentation", :default => false
 end
 
-source_type = 'file'
+@source_type = 'file'
 
 # If source is not just a text file, or the text file specified doesn't exist
 unless File.readable?(opts[:source])
-  source_type = 'directory'
+  @source_type = 'directory'
   Trollop::die :source, "\n\t-- Directory or file '#{opts[:source]}' does not exist" unless File.directory?(opts[:source])
   Trollop::die :source, "\n\t-- Binary '#{opts[:source]}/bin/gem' does not exist" unless File.exists?("#{opts[:source]}/bin/gem")
 end
@@ -62,7 +62,7 @@ def get_file_as_string(filename)
   return data
 end
 
-if source_type == 'directory'
+if @source_type == 'directory'
   gem_list = %x[#{@main_dir}/bin/gem list].split("\n")
 else
   gem_list = get_file_as_string(opts[:source]).split("\n")
