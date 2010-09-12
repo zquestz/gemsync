@@ -10,11 +10,28 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["quest"]
   s.date = %q{2010-09-12}
-  s.description = %q{Small script to sync multiple gem installations.}
+  s.default_executable = %q{gemsync}
+  s.description = %q{Small script to sync multiple gem installations. This can be done by pointing to a ruby installation or from a text file created by `gem list > file.txt`.}
   s.email = %q{quest@mac.com}
+  s.executables = ["gemsync"]
   s.extra_rdoc_files = [
     "LICENSE",
      "README.rdoc"
+  ]
+  s.files = [
+    ".gitignore",
+     "LICENSE",
+     "README.rdoc",
+     "Rakefile",
+     "VERSION",
+     "gemsync.gemspec",
+     "rdoc/created.rid",
+     "rdoc/files/README_rdoc.html",
+     "rdoc/fr_class_index.html",
+     "rdoc/fr_file_index.html",
+     "rdoc/fr_method_index.html",
+     "rdoc/index.html",
+     "rdoc/rdoc-style.css"
   ]
   s.homepage = %q{http://github.com/zquestz/gemsync}
   s.rdoc_options = ["--charset=UTF-8"]

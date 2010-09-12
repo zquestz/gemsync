@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 # Small script to sync multiple gem installations.
 # (c) 2010 Josh Ellithorpe
 
