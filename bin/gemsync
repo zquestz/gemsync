@@ -7,7 +7,7 @@ require 'trollop'
 
 # Setup arguments from the command line.
 opts = Trollop::options do
-  version "gemsync 0.1.0 (c) 2010 Josh Ellithorpe"
+  version "gemsync 0.1.1 (c) 2010 Josh Ellithorpe"
   banner <<-EOS
 Small script to sync multiple gem installations.
 

@@ -5,7 +5,7 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "gemsync"
-    gem.version = "0.1.0"
+    gem.version = "0.1.1"
     gem.summary = %Q{Small script to sync multiple gem installations.}
     gem.description = %Q{Small script to sync multiple gem installations. This can be done by pointing to a ruby installation or from a text file created by `gem list > file.txt`.}
     gem.email = "quest@mac.com"
