@@ -37,7 +37,7 @@ Trollop::die :destination, "\n\t-- Binary '#{opts[:destination]}/bin/gem' does n
 @main_dir = opts[:source]
 @sync_dir = opts[:destination]
 @docstring = opts[:build_docs] ? '--no-ri --no-rdoc' : ''
-@sudostring = opts[:disable_sudo] ? '' : (`which sudo` + ' ')
+@sudostring = opts[:disable_sudo] ? '' : (`which sudo`.strip + ' ') # Just stripping newline
 
 # Gems you don't want to sync
 def get_exceptions
