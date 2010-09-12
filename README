@@ -1,1 +1,12 @@
-Small script to sync gems between multiple ruby installations.
+Small script to sync multiple gem installations.
+
+Usage: gemsync [options]
+
+Available Options:
+       --ruby-install-dir, -r <s>:   Ruby installation directory. Ex: /usr
+  --sync-ruby-install-dir, -s <s>:   Ruby installation directory you want to
+                                     sync up. Ex: /opt/ruby-enterprise
+                 --build-docs, -b:   Build documentation
+                    --version, -v:   Print version and exit
+                       --help, -h:   Show this message
+
