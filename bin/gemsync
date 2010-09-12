@@ -21,12 +21,13 @@ EOS
   opt :build_docs, "Build documentation", :default => false
 end
 
-@source_type = 'file'
+# Check if the file or directory exists, if not exit
+Trollop::die :source, "\n\t-- Directory or file '#{opts[:source]}' does not exist" unless File.exists?(opts[:source])  
 
-# If source is not just a text file, or the text file specified doesn't exist
-unless File.ftype(opts[:source]) == 'file'
+if File.ftype(opts[:source]) == 'file'
+  @source_type = 'file'
+else
   @source_type = 'directory'
-  Trollop::die :source, "\n\t-- Directory or file '#{opts[:source]}' does not exist" unless File.directory?(opts[:source])
   Trollop::die :source, "\n\t-- Binary '#{opts[:source]}/bin/gem' does not exist" unless File.exists?("#{opts[:source]}/bin/gem")
 end
 
@@ -36,7 +37,7 @@ Trollop::die :destination, "\n\t-- Binary '#{opts[:destination]}/bin/gem' does n
 @main_dir = opts[:source]
 @sync_dir = opts[:destination]
 @docstring = opts[:build_docs] ? '--no-ri --no-rdoc' : ''
-@sudostring = opts[:disable_sudo] ? '' : 'sudo '
+@sudostring = opts[:disable_sudo] ? '' : (`which sudo` + ' ')
 
 # Gems you don't want to sync
 def get_exceptions
