@@ -7,7 +7,7 @@ require 'trollop'
 
 # Setup arguments from the command line.
 opts = Trollop::options do
-  version "gemsync 0.1.2 (c) 2010 Josh Ellithorpe"
+  version "gemsync 0.1.3 (c) 2010 Josh Ellithorpe"
   banner <<-EOS
 Small gem to sync multiple gem installations.
 
@@ -36,6 +36,13 @@ Trollop::die :destination, "\n\t-- Binary '#{opts[:destination]}/bin/gem' does n
 
 @main_dir = opts[:source]
 @sync_dir = opts[:destination]
+
+# Cleanup main and sync dir, they shouldn't end in a '/' so lets chomp it.
+# Couldn't use chomp! since opts are frozen.
+@main_dir = @main_dir.chomp('/')
+@sync_dir = @sync_dir.chomp('/')
+
+# Setup additional flags
 @docstring = opts[:build_docs] ? '' : '--no-ri --no-rdoc'
 @sudostring = opts[:disable_sudo] ? '' : (`which sudo`.strip + ' ') # Just stripping newline
 
