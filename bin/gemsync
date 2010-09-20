@@ -6,8 +6,9 @@ require 'rubygems'
 require 'trollop'
 
 # Setup arguments from the command line.
+# This uses the trollop library on github.
 opts = Trollop::options do
-  version "gemsync 0.1.3 (c) 2010 Josh Ellithorpe"
+  version "gemsync 0.1.4 (c) 2010 Josh Ellithorpe"
   banner <<-EOS
 Small gem to sync multiple gem installations.
 
@@ -24,6 +25,7 @@ end
 # Check if the file or directory exists, if not exit
 Trollop::die :source, "\n\t-- Directory or file '#{opts[:source]}' does not exist" unless File.exists?(opts[:source])  
 
+# Check if source is a file or directory.
 if File.ftype(opts[:source]) == 'file'
   @source_type = 'file'
 else
@@ -31,16 +33,14 @@ else
   Trollop::die :source, "\n\t-- Binary '#{opts[:source]}/bin/gem' does not exist" unless File.exists?("#{opts[:source]}/bin/gem")
 end
 
+# Die if destination is set incorrectly
 Trollop::die :destination, "\n\t-- Directory '#{opts[:destination]}' does not exist" unless File.directory?(opts[:destination])
 Trollop::die :destination, "\n\t-- Binary '#{opts[:destination]}/bin/gem' does not exist" unless File.exists?("#{opts[:destination]}/bin/gem")
 
-@main_dir = opts[:source]
-@sync_dir = opts[:destination]
-
 # Cleanup main and sync dir, they shouldn't end in a '/' so lets chomp it.
 # Couldn't use chomp! since opts are frozen.
-@main_dir = @main_dir.chomp('/')
-@sync_dir = @sync_dir.chomp('/')
+@main_dir = opts[:source].chomp('/')
+@sync_dir = opts[:destination].chomp('/')
 
 # Setup additional flags
 @docstring = opts[:build_docs] ? '' : '--no-ri --no-rdoc'
@@ -69,6 +69,7 @@ def get_exceptions
   return returned_exceptions
 end
 
+# Get file as string
 def get_file_as_string(filename)
   data = ''
   f = File.open(filename, "r") 
@@ -78,20 +79,32 @@ def get_file_as_string(filename)
   return data
 end
 
+# Get gem list from source
 if @source_type == 'directory'
   gem_list = %x[#{@main_dir}/bin/gem list].split("\n")
 else
   gem_list = get_file_as_string(opts[:source]).split("\n")
 end
-  
+
+# Get gem list from destination
 sync_gem_list = %x[#{@sync_dir}/bin/gem list].split("\n")
 
 # Cleanup gems we know we don't need to update
 gems = gem_list - sync_gem_list
 
+# Loop through gems and update them.
 for gem in gems
-  gem_name = gem.match(/(.*) \((.*)\)/)[1]
-  gem_versions = gem.match(/(.*) \((.*)\)/)[2]
+  # Trap regexps in try block incase matches don't work out.
+  begin
+    gem_name = gem.match(/(.*) \((.*)\)/)[1]
+    gem_versions = gem.match(/(.*) \((.*)\)/)[2]
+  rescue
+    gem_name = nil
+    gem_versions = nil
+  end
+  next if gem_name.nil? || gem_versions.nil?
+  
+  # If valid gem start checking/updating it.
   puts "## Checking #{gem_name}"
   if get_exceptions().include?(gem_name)
     puts "This gem is known to be incompatible with the sync'd ruby installation"
@@ -115,7 +128,7 @@ for gem in gems
       # Also look for mysql5 type binaries that some package managers use
       mysql_config = `which mysql_config` || `which mysql_config5`
       mysql_dir = `which mysql` || `which mysql5`
-      mysql_dir.split('/')[0..-2].join('/')
+      mysql_dir = mysql_dir.split('/')[0..-2].join('/')
       system("#{@sudostring}#{@sync_dir}/bin/gem install #{gem_name} -v #{version} -- --with-mysql-dir=#{mysql_dir} --with-mysql-config=#{mysql_config} #{@docstring}")
     else
       system("#{@sudostring}#{@sync_dir}/bin/gem install #{gem_name} -v #{version} #{@docstring}")
