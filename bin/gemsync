@@ -8,7 +8,7 @@ require 'trollop'
 # Setup arguments from the command line.
 # This uses the trollop library on github.
 opts = Trollop::options do
-  version "gemsync 0.1.6 (c) 2010 Josh Ellithorpe"
+  version "gemsync 0.1.7 (c) 2010 Josh Ellithorpe"
   banner <<-EOS
 Small gem to sync multiple gem installations.
 
@@ -136,7 +136,7 @@ for gem in gems
       mysql_config = ''
       mysql_dir = ''
       ['', '5'].each do |v|
-        mysql_config = `which mysql_config#{v}` if mysql_config == ''
+        mysql_config = `which mysql_config#{v}`.chomp if mysql_config == ''
         mysql_dir = `which mysql#{v}` if mysql_dir == ''
       end
       mysql_dir = mysql_dir.split('/')[0..-3].join('/')
