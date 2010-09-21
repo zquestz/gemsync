@@ -8,7 +8,7 @@ require 'trollop'
 # Setup arguments from the command line.
 # This uses the trollop library on github.
 opts = Trollop::options do
-  version "gemsync 0.1.4 (c) 2010 Josh Ellithorpe"
+  version "gemsync 0.1.5 (c) 2010 Josh Ellithorpe"
   banner <<-EOS
 Small gem to sync multiple gem installations.
 
@@ -17,7 +17,7 @@ Usage: gemsync [options]
 Available Options:
 EOS
   opt :source, "Either the ruby installation directory, or a list of gems produced from 'gem list'. Ex: /usr or /path/to/gemlist.txt", :type => String, :required => true
-  opt :destination, "Ruby installation directory you want to sync up. Ex: /opt/ruby-enterprise", :type => String, :required => true
+  opt :destination, "Ruby installation directory you want to sync up. Ex: /opt/ruby-enterprise", :type => String, :required => false
   opt :disable_sudo, "Disable sudo when installing gems", :default => false
   opt :build_docs, "Build documentation", :default => false
 end
@@ -33,14 +33,20 @@ else
   Trollop::die :source, "\n\t-- Binary '#{opts[:source]}/bin/gem' does not exist" unless File.exists?("#{opts[:source]}/bin/gem")
 end
 
-# Die if destination is set incorrectly
-Trollop::die :destination, "\n\t-- Directory '#{opts[:destination]}' does not exist" unless File.directory?(opts[:destination])
-Trollop::die :destination, "\n\t-- Binary '#{opts[:destination]}/bin/gem' does not exist" unless File.exists?("#{opts[:destination]}/bin/gem")
+# Attempt to set default destination based upon location of 'gem' binary
+if opts[:destination].nil?
+  guessed_destination_path = %x[which gem].chomp.gsub(/bin\/gem$/, '')
+  Trollop::die :destination, "\n\t-- Destination was not set, and gemsync could not guess it" unless File.directory?(guessed_destination_path)
+else
+  # Die if destination is set incorrectly
+  Trollop::die :destination, "\n\t-- Directory '#{opts[:destination]}' does not exist" unless File.directory?(opts[:destination])
+  Trollop::die :destination, "\n\t-- Binary '#{opts[:destination]}/bin/gem' does not exist" unless File.exists?("#{opts[:destination]}/bin/gem")
+end
 
 # Cleanup main and sync dir, they shouldn't end in a '/' so lets chomp it.
 # Couldn't use chomp! since opts are frozen.
 @main_dir = opts[:source].chomp('/')
-@sync_dir = opts[:destination].chomp('/')
+@sync_dir = opts[:destination].nil? ? guessed_destination_path : opts[:destination].chomp('/')
 
 # Setup additional flags
 @docstring = opts[:build_docs] ? '' : '--no-ri --no-rdoc'
