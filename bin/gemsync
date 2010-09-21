@@ -46,7 +46,7 @@ end
 # Cleanup main and sync dir, they shouldn't end in a '/' so lets chomp it.
 # Couldn't use chomp! since opts are frozen.
 @main_dir = opts[:source].chomp('/')
-@sync_dir = opts[:destination].nil? ? guessed_destination_path : opts[:destination].chomp('/')
+@sync_dir = opts[:destination].nil? ? guessed_destination_path.chomp('/') : opts[:destination].chomp('/')
 
 # Setup additional flags
 @docstring = opts[:build_docs] ? '' : '--no-ri --no-rdoc'
