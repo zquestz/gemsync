@@ -26,7 +26,6 @@ Gem::Specification.new do |s|
      "VERSION",
      "bin/gemsync",
      "gemsync.gemspec",
-     "pkg/gemsync-0.1.4.gem",
      "rdoc/created.rid",
      "rdoc/files/README_rdoc.html",
      "rdoc/fr_class_index.html",
