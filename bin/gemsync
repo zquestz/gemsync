@@ -35,8 +35,8 @@ end
 
 # Attempt to set default destination based upon location of 'gem' binary
 if opts[:destination].nil?
-  guessed_destination_path = %x[which gem].chomp.gsub(/bin\/gem$/, '')
-  Trollop::die :destination, "\n\t-- Destination was not set, and gemsync could not guess it" unless File.directory?(guessed_destination_path)
+  guessed_destination_path = `which gem`.split('/')[0..-3].join('/')
+  Trollop::die :destination, "\n\t-- Destination was not set, and gemsync could not guess it" if (guessed_destination_path == opts[:source] || !File.directory?(guessed_destination_path))
 else
   # Die if destination is set incorrectly
   Trollop::die :destination, "\n\t-- Directory '#{opts[:destination]}' does not exist" unless File.directory?(opts[:destination])
@@ -134,7 +134,7 @@ for gem in gems
       # Also look for mysql5 type binaries that some package managers use
       mysql_config = `which mysql_config` || `which mysql_config5`
       mysql_dir = `which mysql` || `which mysql5`
-      mysql_dir = mysql_dir.split('/')[0..-2].join('/')
+      mysql_dir = mysql_dir.split('/')[0..-3].join('/')
       system("#{@sudostring}#{@sync_dir}/bin/gem install #{gem_name} -v #{version} -- --with-mysql-dir=#{mysql_dir} --with-mysql-config=#{mysql_config} #{@docstring}")
     else
       system("#{@sudostring}#{@sync_dir}/bin/gem install #{gem_name} -v #{version} #{@docstring}")
