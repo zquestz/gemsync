@@ -59,7 +59,7 @@ def get_exceptions
   # hpricot is not in the jruby list because 0.6.x is supported.
   common_exceptions = {
     :ree => ["rubynode"], 
-    :jruby => ["acts_as_ferret", "bleak_house", "bluecloth", "dnssd", "fastthread", "fcgi", "ferret", "fraction", "jk-ferret", "json", "libxml-ruby", "linecache","mysql", "mysql2", "mysqlplus", "passenger", "pauldix-feedzirra", "pcaprub", "rb-appscript", "rmagick", "ruby-debug-base", "ruby-prof", "rubynode", "sqlite3-ruby", "system_timer", "taf2-curb", "termios", "timetrap", "unicorn", "wikitext", "yajl-ruby"]
+    :jruby => ["acts_as_ferret", "bleak_house", "bluecloth", "dnssd", "fastthread", "fcgi", "ferret", "fraction", "jk-ferret", "json", "libxml-ruby", "linecache","mysql", "mysql2", "mysqlplus", "passenger", "pauldix-feedzirra", "pcaprub", "rb-appscript", "RedCloth", "rmagick", "ruby-debug-base", "ruby-prof", "rubynode", "sieve", "sqlite3-ruby", "system_timer", "taf2-curb", "termios", "timetrap", "twitter", "unicorn", "wikitext", "yajl-ruby"]
   }
   mandated_version = {:ruby187 => ["bleak_house"]}
   returned_exceptions = ['']
