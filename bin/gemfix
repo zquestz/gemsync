@@ -1,0 +1,55 @@
+#!/usr/bin/env ruby
+# Small gem to fix gems after system upgrade.
+# (c) 2011 Josh Ellithorpe
+
+require 'rubygems'
+require 'trollop'
+
+# Setup arguments from the command line.
+# This uses the trollop library on github.
+opts = Trollop::options do
+  version "gemfix 0.0.1 (c) 2011 Josh Ellithorpe"
+  banner <<-EOS
+Small gem to fix gems after system upgrade.
+
+Usage: gemfix [options]
+
+Available Options:
+EOS
+  opt :disable_sudo, "Disable sudo when installing gems", :default => false
+  opt :build_docs, "Build documentation", :default => false
+end
+
+# Setup additional flags
+@docstring = opts[:build_docs] ? '' : '--no-ri --no-rdoc'
+@sudostring = opts[:disable_sudo] ? '' : (`which sudo`.strip) # Just stripping newline
+
+gems = %x[gem list].split("\n")
+
+# Loop through gems and update them.
+for gem in gems
+  # Trap regexps in try block incase matches don't work out.
+  begin
+    gem_name = gem.match(/(.*) \((.*)\)/)[1]
+    gem_versions = gem.match(/(.*) \((.*)\)/)[2]
+  rescue
+    next
+  end
+  
+  for version in gem_versions.split(", ")
+    if gem_name == "mysql"
+      # Also look for mysql5 type binaries that some package managers use
+      # The array below is a list of mysql suffixes
+      mysql_config = ''
+      mysql_dir = ''
+      ['', '5'].each do |v|
+        mysql_config = `which mysql_config#{v}`.chomp if mysql_config == ''
+        mysql_dir = `which mysql#{v}` if mysql_dir == ''
+      end
+      mysql_dir = mysql_dir.split('/')[0..-3].join('/')
+      system("#{@sudostring} gem install #{gem_name} -v #{version} #{@docstring} -- --with-mysql-dir=#{mysql_dir} --with-mysql-config=#{mysql_config}".squeeze(' ')) # Remove double spacing
+    else
+      system("#{@sudostring} gem install #{gem_name} -v #{version} #{@docstring}")
+    end
+  end
+end
